@@ -35,7 +35,7 @@ function task2() {
 	setTimeout(function() {
 		console.log('first task2 done!');
 	}, 1000);
-}
+} 
 // task1();
 // task2();
 
