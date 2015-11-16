@@ -9,22 +9,37 @@ var file = "./README.md";
 var file2 = "./HELLO2.md";
 var text = "";
 
-var readFileFunc = function(callback) {
+/**
+ * 파일체크
+ */
+var checkFileFunc  = function(callback) {
 	fs.stat(file, function(err, stats) {
 		// 에러체크
 		if (err) {
 			callback(err);
+		}else{
+			if (!stats.isFile()) {
+				callback('not find');
+			}else{
+				callback(null,'done');
+			}
 		}
+	});
+}
 
-		if (stats.isFile()) {
-			fs.readFile(file, 'utf8', function(err, data) {
-				text = data;
-				callback(null, data);
-			});
-		}
+/**
+ * 파일읽기
+ */
+var readFileFunc = function(callback) {
+	fs.readFile(file, 'utf8', function(err, data) {
+		text = data;
+		callback(null, data);
 	});
 };
 
+/**
+ * 파일쓰기
+ */
 var writeFileFunc = function(callback) {
 	fs.writeFile(file2, text, function(err) {
 		if (err) {
@@ -34,9 +49,9 @@ var writeFileFunc = function(callback) {
 	});
 };
 
-async.series([ readFileFunc, writeFileFunc ], function(err, results) {
+async.series([checkFileFunc, readFileFunc, writeFileFunc ], function(err, results) {
 	if (err) {
-		console.log('error');
+		console.log(err);
 		return;
 	}
 	console.log(results);
