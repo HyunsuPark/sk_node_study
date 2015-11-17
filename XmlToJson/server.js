@@ -18,3 +18,4 @@ var json = xml2json.parser(xml);
 console.log(json);
 
 console.log(JSON.stringify(json));
+
