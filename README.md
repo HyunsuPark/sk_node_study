@@ -1,5 +1,7 @@
 # sk_node_study
 
+# https://github.com/wannabewize/node-samples
+
 ## 11/16 ~ 11/20 수업내용
 
 
