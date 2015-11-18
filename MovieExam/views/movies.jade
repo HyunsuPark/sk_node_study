@@ -1,0 +1,28 @@
+extends layout
+
+block content
+	h1= title
+	ul
+	each item in items
+		li
+			a(href='/movies/'+item) #{item}
+			form(method='post' action='/movies/'+item)
+				input(type='hidden' name='_method' value='delete')
+				input(type='submit' value='삭제')
+	p
+	form(method='post' action='/movies')
+		p 제목:
+		input(type='text' name='name')
+		p 감독:
+		input(type='text' name='director')
+		p 배우:
+		input(type='text' name='actor' value=actor)
+
+		input(type='submit' value='전송')
+	p 수정-----------------------------------------
+	form(method='post' action='/movies')
+		input(type='hidden' name='_method' value='put')
+		p 내용 (json style):
+		input(type='text' name='movies')
+		p
+		input(type='submit' value='전송')
