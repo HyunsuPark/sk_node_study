@@ -1,0 +1,16 @@
+extends layout
+
+block content
+	form(method='post' action='/movies/'+movie.movie_id)
+		input(type='hidden' name='_method' value='put')
+		h2 제목 : 
+		input(type='text' name='title' value=movie.title)
+		h2 감독 : 
+		input(type='text' name='director' value=movie.director)
+		h2 연도 : 
+		input(type='text' name='year' value=movie.year)
+		h2 줄거리 : 
+		input(type='text' name='synopsis' value=movie.synopsis)
+		p
+		input(type='submit' value='수정하기')
+	

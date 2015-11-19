@@ -1,0 +1,14 @@
+extends layout
+
+block content
+	h1(style='text-shadow: 0 0 10px #fff,0 0 20px #fff,0 0 30px #fff,0 0 40px #ff00de,0 0 70px #ff00de,0 0 0px #ff00de,0 0 100px #ff00de,0 0 150px #ff00de;color:white')= title
+	ul(style='')
+	each item in items
+		li(style='list-style:none;color:white')
+			a(style='color:red;text-decoration:none;' href='/movies/'+item.movie_id) 😍 #{item.title}
+			form(method='post' action='/movies/'+item.movie_id)
+				input(type='hidden' name='_method' value='delete')
+				input(type='submit' value='X')
+	p
+	h3
+		a(href='/movies/add') ➕ Add Movie

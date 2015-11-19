@@ -1,0 +1,20 @@
+실행 bin폴더에서
+mongo 
+
+
+use moviest //디비생성
+db.users.save({a:99}) //users 란테이블생성하고 데이터저장
+show collections; 
+db.users.find();
+for(i=0;i<10;i++){ db.users.save({a:i,temp:i*2})} 스크림트가능
+db.users.find({a:99}); 조건으로 찾기
+db.users.find({a:{"$gt":2,"$lt":8}})  2<a<8
+db.users.find({a:{"$in":[3,4,5,6]}})    in
+db.users.find({"$or":[{a:{"$lt":3}},{a:{"$gt":7}}]})   or
+db.users.find({a:{"$nin":[3,4,5,6]}})  not in
+db.users.update({a:3},{"$set":{temp:10}})  update a가 3인애를 temp 10으로
+db.users.remove({a:{"$gt":5}})
+
+ 종료
+ use admin;
+ db.shutdownServer();
