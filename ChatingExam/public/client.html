@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript">
+	var chat_id = "";
+	var socket = null;
+	$(document).ready(function() {
+		socket = io.connect();
+		//결과받기
+		socket.on('chat_join',function(data){//접속성공
+			data = JSON.parse(data);
+			$('#chat_user_list').empty();
+			for (var i = 0; i < data.length; i++) {
+				var user_id = data[i];
+				if (user_id == chat_id) { //나면 나라고 두껍게 
+					$('#chat_user_list').append('<li><strong>'+user_id+'(me)</strong></li>');
+				} else { //일반사용자
+					$('#chat_user_list').append('<li>'+user_id+'</li>');
+				}
+			}
+			$('#now_user_cnt').html(data.length);
+			$('#chat_id').attr('disabled',true);
+		});
+		
+		socket.on('chat_fail',function(data){//접속실패
+			data = JSON.parse(data);
+			alert(data+'님은 이미 접속된 id입니다');
+		});
+		socket.on('someone_leaved',function(data){
+			data = JSON.parse(data);
+			$('#chat_user_list').empty();
+			//사용자리스트 갱신
+			for (var i = 0; i < data.length; i++) {
+				var user_id = data[i];
+				if (user_id == chat_id) { //나면 나라고 두껍게 
+					$('#chat_user_list').append('<li><strong>'+user_id+'(me)</strong></li>');
+				} else { //일반사용자
+					$('#chat_user_list').append('<li>'+user_id+'</li>');
+				}
+			}
+			$('#now_user_cnt').html(data.length);
+		});
+		
+		
+	});
+	
+	function chat_input() {
+		
+	}
+	
+	function chat_out() {
+		socket.emit('leave',JSON.stringify({chat_id:chat_id}));
+		$('#chat_id').attr('disabled',false);
+		$('#chat_id').val('id입력');
+		$('#chat_list').html('');
+		$("#chat_form").slideUp();
+		$("#chat_form_no").slideDown();
+		chat_id = '';
+	}
+
+	function chat_in() {
+		//보내기 emit
+		socket.emit('chat_conn',JSON.stringify({chat_id:chat_id})); //서버에 아이디 전달
+		$('#chat_list').html('');
+	}
+	
+	function connection() {
+		chat_id = $('#chat_id').val();
+		if (chat_id == '' || chat_id == 'id입력') {
+			alert('id입력해주세요');
+		} else {
+			chat_in();
+			$("#chat_form_no").slideUp();
+			$("#chat_form").slideDown();
+		}
+	}
+</script>
+</head>
+<body>
+	<div id="contents">
+		<h1>채팅방</h1>
+		<div class="chat_content">
+			<div class="chat_login"><!-- 로그인영역 -->
+				<input type="text" id="chat_id" value="id입력" onclick="$(this).val('');">
+				&nbsp;&nbsp;<a href="javascript:connection();">접속하기</a>
+				<strong>현재접속자수</strong> : <span id="now_user_cnt">-</span>
+			</div>
+			
+			<div id="chat_form_no">id입력후 접속해주셍</div>
+			<div id="chat_form" style="display: none;">
+				<ul id="chat_list"></ul>
+				<ul id="chat_user_list"></ul>
+				<div class="chat_input">
+					<input type="text" id="chat_input" value="대화글을 입력해주세요" onclick="$(this).val('');">
+					<a href="javascript:chat_input();">입력</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<a href="javascript:chat_out();">나가기</a>
+				</div>
+			</div>
+			<div class="chat_history"><ul id="chat_logs"></ul> </div> <!-- 접속로그영역 -->
+			
+		</div>
+	</div>
+</body>
+</html>
